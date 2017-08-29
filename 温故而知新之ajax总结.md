@@ -26,7 +26,7 @@
  * 不容易调试。
   
 ## 二、进行ajax请求一般流程
-###1. 创建ajax请求对象
+### 1. 创建ajax请求对象
 &nbsp;&nbsp;&nbsp;&nbsp;当我们需要进行数据传输交互的时候，首先需要创建一个ajax请求对象， 通过该对象调用ajax请求的属性和方法。需要注意的是，ajax请求对象有兼容问题，我们可以通过以下代码解决兼容问题:
 
        var ajaxObj = null; //ajax有兼容，下面是处理兼容的方法
@@ -36,7 +36,7 @@
           ajaxObj = new ActiveXObject("Microsoft.XMLHTTP");//IE5,IE6
        }   
 
-###2.建立连接
+### 2.建立连接
 &nbsp;&nbsp;&nbsp;&nbsp;我们通过ajax.open()方法建立与后台的数据连接请求。该方法有三个参数：
 
    * 参数1：请求的方式是GET还是POST，
@@ -46,7 +46,7 @@
         ajaxObj.open("GET","index.php",true);
         ajaxObj.open("POST","index.php",true);
         
-###3.发送请求
+### 3.发送请求
 &nbsp;&nbsp;&nbsp;&nbsp;我们通过ajax.send()方法向后台发送请求。send()方法分为有参和无参两种情况，当我们建立请求使用GET方式时，send()方法无参。放建立请求使用POST方式时， 我们需要字符串格式的参数作为数据传递给后台,同时，我们还需要设置请求头信息。具体实例如下：
         
        ajaxObj = new XMLHttpRequest;//创建ajax请求对象，在这里暂不考虑兼容问题
@@ -59,7 +59,7 @@
        var data = "dataKey1="+dataValue1+ "&dataKey2="+dataValue2;  
        ajaxObj.send(data);
 
-###4. 根据服务器的响应去做对应的处理（监控请求状态并处理）
+### 4. 根据服务器的响应去做对应的处理（监控请求状态并处理）
 &nbsp;&nbsp;&nbsp;&nbsp;我们通过onreadystatechange方法监控请求状态并做响应处理。XMLHttpRequest的请求状态readyState有0到4的发生状态变化：
 
 * 0: 请求未初始化,还没来得及调用open方法
