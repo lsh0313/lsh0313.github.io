@@ -134,51 +134,50 @@ ajax是不支持跨域访问的，一般情况下，我们通过以下三种方�
 
 
         //ajax.js原生封装
-        function AJAX(obj){
-            var ajaxObj = null;
-            if(window.XMLHttpRequest){
-                ajaxObj = new XMLHttpRequest();
-            }else{
-                ajaxObj = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-            
-            ajaxObj.onreadystatechange = function(){
-                if(ajaxObj.readyState == 4 && ajaxObj.status == 200){
-                    if(obj.success){
-                        if(obj.callback&&obj.key){
-                        var script = document.createElement("script");
-                        script.src = obj.responseText +"?"+obj.key+"="+obj.callback;
-                        document.body.appendChild(script);
-                        }else{
-                        obj.success(JSON.parse(ajaxObj.responseText));
-                        }
-                    }else{
-                        alert("缺少成功时执行的回调函数");
-                        return;
-                    }
-                }else if(ajaxObj.readyState == 4 && ajaxObj.status != 200){
-                    if(obj.error){
-                        obj.error(ajaxObj.status);
-                    }else{
-                        alert("缺少失败时执行的回调函数");
-                    }
-                }
-            }
-            var type = obj.type || "GET";
-            var param = "";
-            for(var key in obj.data){
-                param += key + "=" + obj.data[key] + "&";
-                param = param.slice(0,param.length-1);
-            }
-            if(type == "GET"){
-                ajaxObj.open("GET",obj.url+"?"+param,true);
-                ajaxObj.send();
-            }else{
-                ajaxObj.open("POST",obj.url,true);
-                ajaxObj.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-            ajaxObj.send(param);
-            }
-        }
+          function AJAX(obj){   //解决了跨域问题的AJAX函数封装
+	        var ajaxObj = null;
+	        if(window.XMLHttpRequest){
+		        ajaxObj = new XMLHttpRequest();
+	        }else{
+	        	ajaxObj = new ActiveXObject("Microsoft.XMLHTTP");
+	        }
+	        ajaxObj.onreadystatechange = function(){
+		        if(ajaxObj.readyState == 4 && ajaxObj.status == 200){
+		        	if(obj.successCall){
+		        		if(obj.successCall&&obj.crossDomainCall){ //有跨域请求的crossDomainCall函数，有此函数表示有跨域请求
+					        var script = document.createElement("script");
+	                       script.src = obj.responseText +"?"+obj.callBack+"="+obj.crossDomainCall;  //callBack当做函数名传递给后台(可以自定义函数名，不用加obj)，后台需要 _GET("callBack")接收一下，从而方便传函数名和传参数 ,crossDomainCall函数是obj对象的crossDomainCall函数(自定义)。
+	                       document.body.appendChild(script);
+				        }else{
+					        obj.success(JSON.parse(ajaxObj.responseText));
+				        }
+			        }else{
+				        alert("缺少成功时执行的回调函数");
+				        return
+			        }
+		        }else if(ajaxObj.readyState == 4 && ajaxObj.status != 200){
+		        	if(obj.error){
+			        	obj.error(ajaxObj.status);
+			        }else{
+			        	alert("缺少失败时执行的回调函数");
+			        }			
+		        }
+	        }
+	        var type = obj.type || "GET";
+	        var param = "";
+	        for(var key in obj.data){
+	        	param += key + "=" + obj.data[key] + "&";
+		        param = param.slice(0,param.length-1);
+	        }
+	        if(type == "GET"){
+		        ajaxObj.open("GET",obj.url+"?"+param,true);
+		        ajaxObj.send();
+	        }else{
+		        ajaxObj.open("POST",obj.url,true);
+		        ajaxObj.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+		        ajaxObj.send(param);
+	        }
+        };
 
         //ajax函数封装（基于JQ）
         //url：地址
